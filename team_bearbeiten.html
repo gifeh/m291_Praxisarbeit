@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,20 +10,23 @@
 </head>
 <body>
     <div id="app" class="container">
-        <h1>Team Bearbeiten für Projekt: {{ project?.Name }}</h1>
+        <!-- Projektname anzeigen -->
+        <h1>Team Bearbeiten für Projekt: {{ project?.Name}}</h1>
 
         <h2>Teammitglieder</h2>
-        <ul>
+        <ul v-if="teamMembers.length > 0">
             <li v-for="member in teamMembers" :key="member.id">
-                {{ member.name }} - Rolle: 
-                <select v-model="member.role">
-                    <option v-for="role in projectRoles" :key="role.ID" :value="role.Name">
-                        {{ role.Name }}
-                    </option>
-                </select>
-                <button @click="removeTeamMember(member.id)" class="add-remove-btn">Entfernen</button>
+              {{ member.fullName }} - Rolle: 
+              <select v-model="member.role">
+                <option v-for="role in projectRoles" :key="role.ID" :value="role.Name">
+                  {{ role.Name }}
+                </option>
+              </select>
+              <button @click="removeTeamMember(member.id)" class="add-remove-btn">Entfernen</button>
             </li>
         </ul>
+
+        <p v-else>Keine Teammitglieder gefunden.</p>
 
         <h2>Teammitglied hinzufügen</h2>
         <div class="form-group">
@@ -45,5 +48,4 @@
 
     <script src="team_bearbeiten.js"></script>
 </body>
-
 </html>

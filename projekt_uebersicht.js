@@ -30,6 +30,7 @@ createApp({
 
         // Gehe zur Team bearbeiten Seite
         const goToEditTeam = () => {
+            console.log(`Navigiere zu Team bearbeiten mit projectId: ${project.value.ID}`);
             window.location.href = `team_bearbeiten.html?projectId=${project.value.ID}`;
         };
 
