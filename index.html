@@ -1,23 +1,37 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Startseite</title>
+    <title>Projekte</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <!-- Axios für API-Aufrufe -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="center-box">
-        <h2>Wähle ein Projekt</h2>
-
-        <!-- Dropdown-Liste für Projekte -->
-        <select id="project-select">
-            <option value="">Bitte wähle ein Projekt</option>
-        </select>
-
-        <button id="continue-button">Weiter</button>
+    <div id="app" class="container">
+        <h1>Projekte Übersicht</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Coach</th>
+                    <th>Anzahl Teammitglieder</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="project in projects" :key="project.ID" @click="goToProjectOverview(project.ID)">
+                    <td>{{ project.Name }}</td>
+                    <td>{{ project.Coach }}</td>
+                    <td>{{ project.teamMembersCount }}</td>
+                    <td>{{ project.Status === 0 ? 'In Progress' : 'Completed' }}</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
-    <script src="script.js"></script> <!-- Externe JavaScript-Datei -->
+    <script src="index.js"></script>
 </body>
 </html>

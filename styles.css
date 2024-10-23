@@ -1,45 +1,161 @@
-/* Zentrale CSS für alle Seiten */
+/* Grundlegende Styles */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-body, html {
-    height: 100%;
+body {
+    font-family: Arial, sans-serif;
+    background-color: #ffffff;
+    color: #333;
+    line-height: 1.6;
+    padding: 20px;
+}
+
+/* Zentrierter Container */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+/* Titel Styling */
+h1, h2 {
+    color: #8cbf35;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Tabelle */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+thead {
+    background-color: #8cbf35;
+    color: white;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+}
+
+tbody tr:hover {
+    background-color: #e8f5d0;
+}
+
+/* Buttons */
+button {
+    background-color: #8cbf35;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-top: 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #75a82a;
+}
+
+button:focus {
+    outline: none;
+}
+
+/* Select Dropdown */
+select {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin: 10px 0;
+}
+
+/* Liste der Teammitglieder */
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    padding: 10px;
+    background-color: #f9f9f9;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+li:nth-child(odd) {
+    background-color: #f1f1f1;
+}
+
+/* Zentrieren der Inhalte */
+.center {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
+    flex-direction: column;
 }
 
-.center-box {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    width: 300px;
+/* Flex-Container für Formulare */
+.form-group {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
 }
 
-button {
-    padding: 10px 20px;
-    background-color: #007BFF;
+/* Hinzufügen und Entfernen Buttons */
+.add-remove-btn {
+    background-color: #ff4c4c;
     color: white;
     border: none;
+    padding: 5px 10px;
     border-radius: 5px;
     cursor: pointer;
 }
 
-button:hover {
-    background-color: #0056b3;
+.add-remove-btn:hover {
+    background-color: #e43b3b;
 }
 
-select {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+/* Speichern Button */
+.save-btn {
+    background-color: #8cbf35;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-size: 18px;
 }
+
+.save-btn:hover {
+    background-color: #75a82a;
+}
+
+/* Formularüberschrift */
+.form-title {
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+/* Abstände */
+.mb-20 {
+    margin-bottom: 20px;
+}
+

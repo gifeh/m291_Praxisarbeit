@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projekt Übersicht</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app" class="container">
+        <h1>Projekt Übersicht: {{ project?.Name }}</h1>
+        <p><strong>Coach:</strong> {{ project?.Coach }}</p>
+        <p><strong>Status:</strong> {{ project?.Status === 0 ? 'In Progress' : 'Completed' }}</p>
+
+        <h2>Teammitglieder</h2>
+        <ul>
+            <li v-for="member in teamMembers" :key="member.id">
+                {{ member.name }} - Rolle: {{ member.role }}
+            </li>
+        </ul>
+
+        <button @click="goToEditTeam" class="save-btn">Team bearbeiten</button>
+    </div>
+
+    <script src="projekt_uebersicht.js"></script>
+</body>
+
+</html>

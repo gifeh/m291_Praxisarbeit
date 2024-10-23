@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Bearbeiten</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app" class="container">
+        <h1>Team Bearbeiten für Projekt: {{ project?.Name }}</h1>
+
+        <h2>Teammitglieder</h2>
+        <ul>
+            <li v-for="member in teamMembers" :key="member.id">
+                {{ member.name }} - Rolle: 
+                <select v-model="member.role">
+                    <option v-for="role in projectRoles" :key="role.ID" :value="role.Name">
+                        {{ role.Name }}
+                    </option>
+                </select>
+                <button @click="removeTeamMember(member.id)" class="add-remove-btn">Entfernen</button>
+            </li>
+        </ul>
+
+        <h2>Teammitglied hinzufügen</h2>
+        <div class="form-group">
+            <select v-model="newMemberId">
+                <option v-for="employee in availableEmployees" :key="employee.id" :value="employee.id">
+                    {{ employee.fullname }}
+                </option>
+            </select>
+            <select v-model="newMemberRole">
+                <option v-for="role in projectRoles" :key="role.ID" :value="role.Name">
+                    {{ role.Name }}
+                </option>
+            </select>
+            <button @click="addTeamMember" class="save-btn">Hinzufügen</button>
+        </div>
+
+        <button @click="saveChanges" class="save-btn">Änderungen speichern</button>
+    </div>
+
+    <script src="team_bearbeiten.js"></script>
+</body>
+
+</html>
