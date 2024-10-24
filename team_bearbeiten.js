@@ -5,6 +5,7 @@ createApp({
         return {
             project: null,
             teamMembers: [],
+            newMembers: [],
             availableEmployees: [],
             projectRoles: [],
             newMemberId: null,
@@ -25,7 +26,6 @@ createApp({
                 console.error(`Fehler beim Laden von ${url}:`, error);
             }
         },
-
 
         async fetchProjectData() {
             const projectId = this.getProjectIdFromUrl();
@@ -52,8 +52,10 @@ createApp({
             // Für jedes existierende Teammitglied, hole die Details (z.B. Name) von der API
             existingMembers.forEach(async member => {
                 const student = await axios.get(`https://api-sbw-plc.sbw.media/Student/${member.StudentID}`);
+                
                 this.teamMembers.push({
                     id: member.StudentID,
+                    entryId: member.ID,
                     fullName: student.data.fullname, // Annahme, dass fullname im Response vorhanden ist
                     role: member.ProjectRoleID
                 });
@@ -75,53 +77,31 @@ createApp({
                 return alert('Es kann nur einen Projektleiter geben.');
             }
 
+            this.newMembers.push({ id: newMember.id, fullName: newMember.fullname, role: this.newMemberRole });
             this.teamMembers.push({ id: newMember.id, fullName: newMember.fullname, role: this.newMemberRole });
             this.newMemberId = null;
             this.newMemberRole = '';
         },
 
         removeTeamMember(memberId) {
+            this.teamMembers.filter(member => member.id === memberId).forEach(this.deleteMember);
             this.teamMembers = this.teamMembers.filter(member => member.id !== memberId);
         },
 
         saveChanges() {
-            console.log('Änderungen wurden gespeichert:', this.teamMembers);
-            this.teamMembers.forEach(this.saveMember);
+            console.log('Änderungen wurden gespeichert:', this.newMembers);
+            this.newMembers.forEach(this.saveMember);
+            this.newMembers = [];
         },
-        
-        async mounted() {
-        try {
-        await this.loadTeamMembers();
-        } catch (error) {
-            console.error("Fehler beim Laden der Teammitglieder:", error);
-        }
-        },
-        async loadTeamMembers() {
-            try {
-                const response = await axios.get("https://api-sbw-plc.sbw.media/Studentroleproject");
-                this.teamMembers = response.data.resource
-                    .map(teamMember => ({
-                        id: teamMember.StudentID,
-                        fullName: teamMember.Student.fullname,
-                        role: teamMember.ProjectRoleID,
-                        Start: new Date().toISOString().split('T')[0],
-                        // end: new Date().toISOString().split('T')[0]
-                    }));
-            } catch (error) {
-                console.error("Fehler beim Laden der Teammitglieder:", error);
-            }
-        },
-        
 
+        async deleteMember(member){
+            console.log(member);
+            await axios.delete(`https://api-sbw-plc.sbw.media/Studentroleproject/${member.entryId}`);
+            
+        },
 
         async saveMember(member) {
-<<<<<<< HEAD
             await axios.post("https://api-sbw-plc.sbw.media/Studentroleproject", {
-=======
-
-         
-            const response = await axios.post("https://api-sbw-plc.sbw.media/Studentroleproject", {
->>>>>>> 2889bdfff10b97bccd2096b7972faa586ca7eda1
                 StudentID: member.id,
                 ProjectID: 164,
                 Start: new Date().toISOString().split('T')[0], // Heute als Datum formatieren
@@ -129,7 +109,7 @@ createApp({
                 End: "2024-10-24" // Enddatum im ISO-Format
             });
         },
-       },
+    },
 
     mounted() {
         this.fetchProjectData();
