@@ -19,15 +19,12 @@
                 {{ member.fullName }} - Rolle: 
                 <select v-model="member.role">
                     <option v-for="role in projectRoles" :key="role.ID" :value="role.ID">
-                    {{ role.Name }}
+                        {{ role.Name }}
                     </option>
                 </select>
                 <button @click="removeTeamMember(member.id)" class="add-remove-btn">Entfernen</button>
             </li>
         </ul>
-          
-
-
         <p v-else>Keine Teammitglieder gefunden.</p>
 
         <h2>Teammitglied hinzufügen</h2>
