@@ -26,7 +26,6 @@ createApp({
             }
         },
 
-
         async fetchProjectData() {
             const projectId = this.getProjectIdFromUrl();
             if (!projectId) {
@@ -88,40 +87,9 @@ createApp({
             console.log('Änderungen wurden gespeichert:', this.teamMembers);
             this.teamMembers.forEach(this.saveMember);
         },
-        
-        async mounted() {
-        try {
-        await this.loadTeamMembers();
-        } catch (error) {
-            console.error("Fehler beim Laden der Teammitglieder:", error);
-        }
-        },
-        async loadTeamMembers() {
-            try {
-                const response = await axios.get("https://api-sbw-plc.sbw.media/Studentroleproject");
-                this.teamMembers = response.data.resource
-                    .map(teamMember => ({
-                        id: teamMember.StudentID,
-                        fullName: teamMember.Student.fullname,
-                        role: teamMember.ProjectRoleID,
-                        Start: new Date().toISOString().split('T')[0],
-                        // end: new Date().toISOString().split('T')[0]
-                    }));
-            } catch (error) {
-                console.error("Fehler beim Laden der Teammitglieder:", error);
-            }
-        },
-        
-
 
         async saveMember(member) {
-<<<<<<< HEAD
             await axios.post("https://api-sbw-plc.sbw.media/Studentroleproject", {
-=======
-
-         
-            const response = await axios.post("https://api-sbw-plc.sbw.media/Studentroleproject", {
->>>>>>> 2889bdfff10b97bccd2096b7972faa586ca7eda1
                 StudentID: member.id,
                 ProjectID: 164,
                 Start: new Date().toISOString().split('T')[0], // Heute als Datum formatieren
@@ -129,7 +97,7 @@ createApp({
                 End: "2024-10-24" // Enddatum im ISO-Format
             });
         },
-       },
+    },
 
     mounted() {
         this.fetchProjectData();
