@@ -16,15 +16,17 @@
         <h2>Teammitglieder</h2>
         <ul v-if="teamMembers.length > 0">
             <li v-for="member in teamMembers" :key="member.id">
-              {{ member.fullName }} - Rolle: 
-              <select v-model="member.role">
-                <option v-for="role in projectRoles" :key="role.ID" :value="role.Name">
-                  {{ role.Name }}
-                </option>
-              </select>
-              <button @click="removeTeamMember(member.id)" class="add-remove-btn">Entfernen</button>
+                {{ member.fullName }} - Rolle: 
+                <select v-model="member.role">
+                    <option v-for="role in projectRoles" :key="role.ID" :value="role.ID">
+                    {{ role.Name }}
+                    </option>
+                </select>
+                <button @click="removeTeamMember(member.id)" class="add-remove-btn">Entfernen</button>
             </li>
         </ul>
+          
+
 
         <p v-else>Keine Teammitglieder gefunden.</p>
 
@@ -36,7 +38,7 @@
                 </option>
             </select>
             <select v-model="newMemberRole">
-                <option v-for="role in projectRoles" :key="role.ID" :value="role.Name">
+                <option v-for="role in projectRoles" :key="role.ID" :value="role.ID">
                     {{ role.Name }}
                 </option>
             </select>
