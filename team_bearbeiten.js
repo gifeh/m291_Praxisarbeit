@@ -14,79 +14,70 @@ createApp({
 
     methods: {
         getProjectIdFromUrl() {
-            const params = new URLSearchParams(window.location.search);
-            return params.get('projectId');
+            return new URLSearchParams(window.location.search).get('projectId');
+        },
+
+        async fetchData(url) {
+            try {
+                const response = await axios.get(url);
+                return response.data.resources || response.data;
+            } catch (error) {
+                console.error(`Fehler beim Laden von ${url}:`, error);
+            }
         },
 
         async fetchProjectData() {
-            try {
-                const projectId = this.getProjectIdFromUrl();
-                if (!projectId) {
-                    console.error("Keine projectId in der URL gefunden.");
-                    return;
-                }
-
-                const response = await axios.get(`https://api-sbw-plc.sbw.media/Project/${projectId}`);
-                this.project = response.data;
-                this.teamMembers = this.project.teamMembers || [];
-            } catch (error) {
-                console.error("Fehler beim Laden der Projektdaten:", error);
+            const projectId = this.getProjectIdFromUrl();
+            if (!projectId) {
+                console.error("Keine projectId in der URL gefunden.");
+                return;
             }
+            this.project = await this.fetchData(`https://api-sbw-plc.sbw.media/Project/${projectId}`);
+            this.teamMembers = this.project.teamMembers || [];
         },
 
         async fetchAvailableEmployees() {
-            try {
-                const response = await axios.get('https://api-sbw-plc.sbw.media/Student');
-                this.availableEmployees = response.data.resources.map(emp => ({
-                    id: emp.id,
-                    fullname: emp.fullname // Nur fullname wird verwendet
-                }));
-                console.log("Verfügbare Mitarbeiter:", this.availableEmployees);
-            } catch (error) {
-                console.error("Fehler beim Laden der verfügbaren Mitarbeiter:", error);
-            }
+            this.availableEmployees = await this.fetchData('https://api-sbw-plc.sbw.media/Student');
         },
 
         async fetchProjectRoles() {
-            try {
-                const response = await axios.get('https://api-sbw-plc.sbw.media/Projectrole');
-                this.projectRoles = response.data.resources;
-            } catch (error) {
-                console.error("Fehler beim Laden der Projektrollen:", error);
-            }
+            this.projectRoles = await this.fetchData('https://api-sbw-plc.sbw.media/Projectrole');
+        },
+
+        async fetchExistingTeamMembers() {
+            const projectId = 164; // Fester Wert, du kannst ihn auch dynamisch setzen, falls nötig
+            const existingMembers = await this.fetchData(`https://api-sbw-plc.sbw.media/Studentroleproject?ProjectID=${projectId}`);
+            
+            // Für jedes existierende Teammitglied, hole die Details (z.B. Name) von der API
+            existingMembers.forEach(async member => {
+                const student = await axios.get(`https://api-sbw-plc.sbw.media/Student/${member.StudentID}`);
+                this.teamMembers.push({
+                    id: member.StudentID,
+                    fullName: student.data.fullname, // Annahme, dass fullname im Response vorhanden ist
+                    role: member.ProjectRoleID
+                });
+            });
         },
 
         addTeamMember() {
-            if (this.newMemberId && this.newMemberRole) {
-                const newMember = this.availableEmployees.find(emp => emp.id === this.newMemberId);
-                if (newMember) {
-                    // Überprüfen, ob das Teammitglied bereits hinzugefügt wurde
-                    const isMemberAlreadyAdded = this.teamMembers.some(member => member.id === newMember.id);
-                    if (!isMemberAlreadyAdded) {
-                        // Überprüfen, ob schon ein Projektleiter existiert
-                        const isProjectLeaderAlreadyAdded = this.teamMembers.some(member => member.role === 'Projektleiter');
+            if (!this.newMemberId || !this.newMemberRole) return;
 
-                        if (this.newMemberRole === 'PL' && isProjectLeaderAlreadyAdded) {
-                            alert('Es kann nur einen Projektleiter geben.');
-                            return; // Stoppe den Hinzufüge-Vorgang
-                        }
+            const newMember = this.availableEmployees.find(emp => emp.id === this.newMemberId);
+            if (!newMember) return alert("Mitarbeiter nicht gefunden.");
 
-                        // Verwende nur fullname aus den API-Daten
-                        const fullName = newMember.fullname;
-
-                        // Teammitglied hinzufügen
-                        this.teamMembers.push({ id: newMember.id, fullName, role: this.newMemberRole });
-
-                        // Zurücksetzen der Auswahl nach dem Hinzufügen
-                        this.newMemberId = null;
-                        this.newMemberRole = '';
-                    } else {
-                        alert("Dieses Teammitglied wurde bereits hinzugefügt.");
-                    }
-                }
+            if (this.teamMembers.some(member => member.id === newMember.id)) {
+                return alert("Dieses Teammitglied wurde bereits hinzugefügt.");
             }
-        },
 
+            const isProjectLeaderAlreadyAdded = this.teamMembers.some(member => member.role === 'Projektleiter');
+            if (this.newMemberRole === 'PL' && isProjectLeaderAlreadyAdded) {
+                return alert('Es kann nur einen Projektleiter geben.');
+            }
+
+            this.teamMembers.push({ id: newMember.id, fullName: newMember.fullname, role: this.newMemberRole });
+            this.newMemberId = null;
+            this.newMemberRole = '';
+        },
 
         removeTeamMember(memberId) {
             this.teamMembers = this.teamMembers.filter(member => member.id !== memberId);
@@ -98,14 +89,13 @@ createApp({
         },
 
         async saveMember(member) {
-            const response = await axios.post("https://api-sbw-plc.sbw.media/Studentroleproject", {
+            await axios.post("https://api-sbw-plc.sbw.media/Studentroleproject", {
                 StudentID: member.id,
                 ProjectID: 164,
-                //Heute als Datum formatieren
-                Start: new Date().toISOString().split('T')[0],
+                Start: new Date().toISOString().split('T')[0], // Heute als Datum formatieren
                 ProjectRoleID: member.role,
-                //End: "2024-10-24"
-            })
+                End: "2024-10-24" // Enddatum im ISO-Format
+            });
         },
     },
 
@@ -113,5 +103,6 @@ createApp({
         this.fetchProjectData();
         this.fetchAvailableEmployees();
         this.fetchProjectRoles();
+        this.fetchExistingTeamMembers(); // Existierende Teammitglieder laden
     }
 }).mount('#app');
