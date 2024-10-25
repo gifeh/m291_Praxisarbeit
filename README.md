@@ -1,4 +1,4 @@
-**1.0 Ausgangslage**
+###**1.0 Ausgangslage**
 
 Wir beide hatten wenig bis keine Ahnung von Java-Script geschweige denn von vue. Deswegen war der Druck von Anfang an au sehr hoch und es war uns klar das dieses Modul eine Herauforderung wird.
 
