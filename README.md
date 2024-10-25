@@ -9,6 +9,7 @@ Für die Abschlussarbeit vom M291 haben wir ein Auftrag ausgesucht, bei dem man 
 
 
 3.0 Testing
+
 Alles funktioniert problemlos, man kann für Projekte Teams erstellen, diese in der API abspeichern, bearbeiten oder Entfernen. Die Änderungen werden übernommen, auch in der Tabellenansicht ändert sich die Anzahl der Teammitglieder. Das einzige. Das einzige was auffällt, der HTML-Validator scheint Schwierigkeiten mit VUE-Tags zu haben.
 
 
