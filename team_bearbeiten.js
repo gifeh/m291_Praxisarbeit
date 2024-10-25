@@ -9,7 +9,8 @@ createApp({
             availableEmployees: [],
             projectRoles: [],
             newMemberId: null,
-            newMemberRole: ''
+            newMemberRole: '',
+            projectId: null // Neue Eigenschaft zur Speicherung der projectId
         };
     },
 
@@ -28,7 +29,7 @@ createApp({
         },
 
         async fetchProjectData() {
-            const projectId = this.getProjectIdFromUrl();
+            const projectId = this.projectId;
             if (!projectId) {
                 console.error("Keine projectId in der URL gefunden.");
                 return;
@@ -46,17 +47,19 @@ createApp({
         },
 
         async fetchExistingTeamMembers() {
-            const projectId = 164; // Fester Wert, du kannst ihn auch dynamisch setzen, falls nötig
+            const projectId = this.projectId;
+            if (!projectId) {
+                console.error("Keine projectId in der URL gefunden.");
+                return;
+            }
             const existingMembers = await this.fetchData(`https://api-sbw-plc.sbw.media/Studentroleproject?ProjectID=${projectId}`);
             
-            // Für jedes existierende Teammitglied, hole die Details (z.B. Name) von der API
             existingMembers.forEach(async member => {
                 const student = await axios.get(`https://api-sbw-plc.sbw.media/Student/${member.StudentID}`);
-                
                 this.teamMembers.push({
                     id: member.StudentID,
                     entryId: member.ID,
-                    fullName: student.data.fullname, // Annahme, dass fullname im Response vorhanden ist
+                    fullName: student.data.fullname, 
                     role: member.ProjectRoleID
                 });
             });
@@ -94,27 +97,36 @@ createApp({
             this.newMembers = [];
         },
 
-        async deleteMember(member){
+        async deleteMember(member) {
             console.log(member);
             await axios.delete(`https://api-sbw-plc.sbw.media/Studentroleproject/${member.entryId}`);
-            
         },
 
         async saveMember(member) {
+            const projectId = this.projectId;
+            if (!projectId) {
+                console.error("Keine projectId in der URL gefunden.");
+                return;
+            }
             await axios.post("https://api-sbw-plc.sbw.media/Studentroleproject", {
                 StudentID: member.id,
-                ProjectID: 164,
-                Start: new Date().toISOString().split('T')[0], // Heute als Datum formatieren
+                ProjectID: projectId,
+                Start: new Date().toISOString().split('T')[0], 
                 ProjectRoleID: member.role,
-                End: "2024-10-24" // Enddatum im ISO-Format
+                End: "2024-10-24" 
             });
         },
     },
 
     mounted() {
+        this.projectId = this.getProjectIdFromUrl(); // projectId beim Laden setzen
+        if (!this.projectId) {
+            console.error("Keine projectId in der URL gefunden.");
+            return;
+        }
         this.fetchProjectData();
         this.fetchAvailableEmployees();
         this.fetchProjectRoles();
-        this.fetchExistingTeamMembers(); // Existierende Teammitglieder laden
+        this.fetchExistingTeamMembers();
     }
 }).mount('#app');
