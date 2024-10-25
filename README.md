@@ -2,13 +2,14 @@
 
 Wir beide hatten wenig bis keine Ahnung von Java-Script geschweige denn von vue. Deswegen war der Druck von Anfang an au sehr hoch und es war uns klar das dieses Modul eine Herauforderung wird.
 
+
 2.0 Projektbeschreibung
 
 Für die Abschlussarbeit vom M291 haben wir ein Auftrag ausgesucht, bei dem man Ein Team für ein Projekt erstellen und nachträglich auch bearbeiten kann. Daten, wie Lernpartner, Projektnamen, Projektrollen usw. werden von API's bezogen.
 
+
 3.0
-
-
+Alles funktioniert problemlos, man kann für Projekte Teams erstellen, diese in der API abspeichern, bearbeiten oder Entfernen. Die Änderungen werden übernommen, auch in der Tabellenansicht ändert sich die Anzahl der Teammitglieder. Das einzige. Das einzige was auffällt, der HTML-Validator scheint Schwierigkeiten mit VUE-Tags zu haben.
 
 
 4.0 Fazit

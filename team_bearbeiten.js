@@ -53,13 +53,13 @@ createApp({
                 return;
             }
             const existingMembers = await this.fetchData(`https://api-sbw-plc.sbw.media/Studentroleproject?ProjectID=${projectId}`);
-            
+
             existingMembers.forEach(async member => {
                 const student = await axios.get(`https://api-sbw-plc.sbw.media/Student/${member.StudentID}`);
                 this.teamMembers.push({
                     id: member.StudentID,
                     entryId: member.ID,
-                    fullName: student.data.fullname, 
+                    fullName: student.data.fullname,
                     role: member.ProjectRoleID
                 });
             });
@@ -111,9 +111,9 @@ createApp({
             await axios.post("https://api-sbw-plc.sbw.media/Studentroleproject", {
                 StudentID: member.id,
                 ProjectID: projectId,
-                Start: new Date().toISOString().split('T')[0], 
+                Start: new Date().toISOString().split('T')[0],
                 ProjectRoleID: member.role,
-                End: "2024-10-24" 
+                End: "2024-10-24"
             });
         },
     },
