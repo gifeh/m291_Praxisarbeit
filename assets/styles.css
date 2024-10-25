@@ -60,7 +60,6 @@ button {
     color: white;
     border: none;
     padding: 10px 20px;
-    margin-top: 20px;
     cursor: pointer;
     border-radius: 5px;
     font-size: 16px;
@@ -68,7 +67,11 @@ button {
 }
 
 button:hover {
-    background-color: #e20a17;
+    background-color: #e27077;
+}
+
+button:active{
+    scale: 0.95;
 }
 
 button:focus {
@@ -121,16 +124,21 @@ li:nth-child(odd) {
 
 /* Hinzufügen und Entfernen Buttons */
 .add-remove-btn {
-    background-color: #ff4c4c;
+    background-color: #e20a17;
     color: white;
     border: none;
     padding: 5px 10px;
     border-radius: 5px;
     cursor: pointer;
+    
 }
 
 .add-remove-btn:hover {
-    background-color: #e43b3b;
+    background-color: #e27077;
+}
+
+.add-remove-btn:active{
+    scale: 0.95;
 }
 
 /* Speichern Button */
@@ -142,7 +150,7 @@ li:nth-child(odd) {
 }
 
 .save-btn:hover {
-    background-color: #e20a17;
+    background-color: #e27077;
 }
 
 /* Formularüberschrift */
@@ -155,4 +163,3 @@ li:nth-child(odd) {
 .mb-20 {
     margin-bottom: 20px;
 }
-

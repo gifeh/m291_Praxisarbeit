@@ -67,24 +67,31 @@ createApp({
 
         addTeamMember() {
             if (!this.newMemberId || !this.newMemberRole) return;
-
+        
             const newMember = this.availableEmployees.find(emp => emp.id === this.newMemberId);
             if (!newMember) return alert("Mitarbeiter nicht gefunden.");
-
+        
+            // Überprüfung, ob das Teammitglied bereits hinzugefügt wurde
             if (this.teamMembers.some(member => member.id === newMember.id)) {
                 return alert("Dieses Teammitglied wurde bereits hinzugefügt.");
             }
-
-            const isProjectLeaderAlreadyAdded = this.teamMembers.some(member => member.role === 'Projektleiter');
+        
+            // Überprüfung, ob bereits ein Projektleiter vorhanden ist
+            const isProjectLeaderAlreadyAdded = this.teamMembers.some(member => member.role === 'PL') ||
+                                                this.newMembers.some(member => member.role === 'PL');
             if (this.newMemberRole === 'PL' && isProjectLeaderAlreadyAdded) {
                 return alert('Es kann nur einen Projektleiter geben.');
             }
-
+        
+            // Hinzufügen des neuen Mitglieds zu den Listen
             this.newMembers.push({ id: newMember.id, fullName: newMember.fullname, role: this.newMemberRole });
             this.teamMembers.push({ id: newMember.id, fullName: newMember.fullname, role: this.newMemberRole });
+            
+            // Zurücksetzen der Auswahlfelder
             this.newMemberId = null;
             this.newMemberRole = '';
         },
+        
 
         removeTeamMember(memberId) {
             this.teamMembers.filter(member => member.id === memberId).forEach(this.deleteMember);
@@ -93,16 +100,27 @@ createApp({
 
         saveChanges() {
             console.log('Änderungen wurden gespeichert:', this.newMembers);
+            
+            // Speichern neuer Mitglieder
             this.newMembers.forEach(this.saveMember);
             this.newMembers = [];
+        
+            // Aktualisieren bestehender Mitglieder
             this.teamMembers.forEach(async member => {
-
-                const student = await axios({
-                    method: 'put',
-                    url: `https://api-sbw-plc.sbw.media/Studentroleproject/${member.entryId}`,
-                    data: { ProjectRoleID: member.role }
-                })
+                if (member.entryId) {  // Prüfen, ob entryId definiert ist
+                    try {
+                        await axios.put(`https://api-sbw-plc.sbw.media/Studentroleproject/${member.entryId}`, {
+                            ProjectRoleID: member.role
+                        });
+                    } catch (error) {
+                        console.error('Fehler beim Aktualisieren des Teammitglieds:', error);
+                    }
+                } else {
+                    console.warn('Übersprungen: Kein gültiger entryId für Teammitglied', member);
+                }
             });
+        
+            alert('Änderungen wurden gespeichert.');
         },
 
         async deleteMember(member) {

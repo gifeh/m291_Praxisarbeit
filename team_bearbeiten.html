@@ -14,17 +14,25 @@
         <h1>Team Bearbeiten für Projekt: {{ project?.Name}}</h1>
 
         <h2>Teammitglieder</h2>
-        <ul v-if="teamMembers.length > 0">
-            <li v-for="member in teamMembers" :key="member.id">
-                {{ member.fullName }} - Rolle: 
-                <select v-model="member.role">
-                    <option v-for="role in projectRoles" :key="role.ID" :value="role.ID">
-                        {{ role.Name }}
-                    </option>
-                </select>
-                <button @click="removeTeamMember(member.id)" class="add-remove-btn">Entfernen</button>
-            </li>
-        </ul>
+        <table v-if="teamMembers.length > 0">
+            <tbody>
+                <tr v-for="member in teamMembers" :key="member.id">
+                    <td>{{ member.fullName }}</td>
+                    <td class="role-select">
+                        <select v-model="member.role">
+                            <option v-for="role in projectRoles" :key="role.ID" :value="role.ID">
+                                {{ role.Name }}
+                            </option>
+                        </select>
+                    </td>
+                    <td class="action-button">
+                        <button @click="removeTeamMember(member.id)" class="add-remove-btn">Entfernen</button>
+                    </td>
+                </tr>
+            </tbody>
+
+        </table>
+        
         <p v-else>Keine Teammitglieder gefunden.</p>
 
         <h2>Teammitglied hinzufügen</h2>
