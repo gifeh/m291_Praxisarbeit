@@ -9,7 +9,7 @@ createApp({
             try {
                 // Lade Projekte von der API
                 const response = await axios.get('https://api-sbw-plc.sbw.media/Project');
-                
+
                 // Projekte initialisieren
                 projects.value = response.data.resources.map(project => ({
                     ...project,
@@ -19,7 +19,7 @@ createApp({
                 // Lade Teammitglieder-Daten und aktualisiere Teammitgliedszähler für jedes Projekt
                 for (let project of projects.value) {
                     const membersResponse = await axios.get(`https://api-sbw-plc.sbw.media/Studentroleproject?ProjectID=${project.ID}`);
-                    
+
                     // Überprüfen, ob das 'resources'-Array existiert
                     if (membersResponse.data && Array.isArray(membersResponse.data.resources)) {
                         project.teamMembersCount = membersResponse.data.resources.length;

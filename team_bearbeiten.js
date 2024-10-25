@@ -95,6 +95,14 @@ createApp({
             console.log('Änderungen wurden gespeichert:', this.newMembers);
             this.newMembers.forEach(this.saveMember);
             this.newMembers = [];
+            this.teamMembers.forEach(async member => {
+
+                const student = await axios({
+                    method: 'put',
+                    url: `https://api-sbw-plc.sbw.media/Studentroleproject/${member.entryId}`,
+                    data: { ProjectRoleID: member.role }
+                })
+            });
         },
 
         async deleteMember(member) {
